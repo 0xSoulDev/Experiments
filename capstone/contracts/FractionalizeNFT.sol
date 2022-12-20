@@ -100,7 +100,7 @@ contract FractionalizeNFT is IERC721Receiver {
 
     function withdrawNftNotFractionalized(address _NftContract, uint256 _NFTId) public {
         uint256 index = NFTIndex[_NftContract][_NFTId];
-        require (AccessDeposits[msg.sender].Deposit[index].hasFractionalized == false, "Only if the NFT hasn't been fractionalise can you withdraw the NFT with this function");
+        require (AccessDeposits[msg.sender].Deposit[index].hasFractionalized == false, "You can withdraw the NFT with this function only if the NFT hasn't been fractionalized");
         require (AccessDeposits[msg.sender].Deposit[index].owner == msg.sender, "Only the NFT owner can call this function");
 
         ERC721 NFT = ERC721(_NftContract);

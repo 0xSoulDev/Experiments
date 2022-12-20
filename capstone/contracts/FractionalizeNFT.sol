@@ -72,6 +72,7 @@ contract FractionalizeNFT is IERC721Receiver {
                                                         );
 
         AccessDeposits[msg.sender].Deposit[index].fractionContractAddress = address(fractionToken);
+        AccessDeposits[msg.sender].Deposit[index].supply = _supply;
     }
 
     //can withdraw the NFT if you own the total supply

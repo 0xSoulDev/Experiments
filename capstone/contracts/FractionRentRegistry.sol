@@ -12,7 +12,7 @@ contract FractionRentRegistry is Ownable {
     using SafeERC20 for IERC20;
 
     IERC20 public tokenUsedForRentPayments;
-    IERC20 public immutable investmentToken;
+    IERC20 public investmentToken;
 
     uint256 public totalSupply;
     uint256 public totalRent;

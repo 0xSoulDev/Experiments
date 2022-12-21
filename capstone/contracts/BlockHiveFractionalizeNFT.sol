@@ -4,9 +4,9 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
-import './FractionToken.sol';
+import './BlockHiveFractionToken.sol';
 
-contract FractionalizeNFT is IERC721Receiver {
+contract BlockHiveFractionalizeNFT is IERC721Receiver {
     mapping(address => DepositNFTBundle) AccessDeposits;
     mapping(address => mapping (uint256 => uint256)) NFTIndex;
 

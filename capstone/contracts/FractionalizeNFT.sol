@@ -43,7 +43,7 @@ contract FractionalizeNFT is IERC721Receiver {
 
         newDeposit.hasFractionalized = false;
 
-        //set index location of nft in nft folder to prevent the need of for loops when accessing deposit information
+        //set index location of nft in DepositNFTBundle to prevent the need of for loops when accessing deposit information
         NFTIndex[_NFTContractAddress][_NFTId] = AccessDeposits[msg.sender].Deposit.length;
 
         //save the new infomation into the smart contract

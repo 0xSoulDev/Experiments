@@ -12,7 +12,7 @@ contract FractionRentRegistry is Ownable {
     using SafeERC20 for IERC20;
 
     IERC20 public tokenUsedForRentPayments;
-    IERC20 public immutable ownershipToken;
+    IERC20 public immutable investmentToken;
 
     uint256 public totalSupply;
     uint256 public totalRent;
@@ -35,8 +35,8 @@ contract FractionRentRegistry is Ownable {
 
     event RentDeposited(address tenant, uint256 amount, uint256 timestamp);
     event RentShareWithdrawn(address investor, uint256 amount, uint256 timestamp);
-    event OwnershipTokenStaked(address investor, uint256 amount, uint256 timestamp);
-    event OwnershipTokenUnstaked(address investor, uint256 amount, uint256 timestamp);
+    event InvestmentTokenStaked(address investor, uint256 amount, uint256 timestamp);
+    event InvestmentTokenUnstaked(address investor, uint256 amount, uint256 timestamp);
     event Received(address, uint);
     event FBReceived(address, uint);
 
@@ -46,18 +46,18 @@ contract FractionRentRegistry is Ownable {
     }
 
     constructor(
-        address _ownershipToken,
+        address _investmentToken,
         address _tokenUsedForRentPayments,
         uint256 _totalRent
     ) {
-        require(_ownershipToken != address(0x0), "Input Adress can't be Zero Address");
+        require(_investmentToken != address(0x0), "Input Adress can't be Zero Address");
         require(_tokenUsedForRentPayments != address(0x0), "Input Adress can't be Zero Address");
         require(_totalRent > 0, "Total Rent can't be 0");
 
         contractOwner = msg.sender;
-        ownershipToken = IERC20(_ownershipToken);
+        investmentToken = IERC20(_investmentToken);
         tokenUsedForRentPayments = IERC20(_tokenUsedForRentPayments);
-        totalSupply = ownershipToken.totalSupply();
+        totalSupply = investmentToken.totalSupply();
         totalRent = _totalRent;
     }
 
@@ -90,12 +90,12 @@ contract FractionRentRegistry is Ownable {
         totalRentPaid[msg.sender] += _rentAmount;
     }
 
-    function stakeOwnershipTokens(uint256 _tokenStakeAmount) public {
+    function stakeinvestmentTokens(uint256 _tokenStakeAmount) public {
         require(_tokenStakeAmount > 0, "Can't stake 0 tokens");
-        require(ownershipToken.balanceOf(msg.sender) >= _tokenStakeAmount, "User's token balance is less than specified staking amount");
-        ownershipToken.safeTransferFrom(msg.sender, address(this), _tokenStakeAmount);
+        require(investmentToken.balanceOf(msg.sender) >= _tokenStakeAmount, "User's token balance is less than specified staking amount");
+        investmentToken.safeTransferFrom(msg.sender, address(this), _tokenStakeAmount);
         balanceOf[msg.sender] += _tokenStakeAmount;
-        emit OwnershipTokenStaked(msg.sender, _tokenStakeAmount, block.timestamp);
+        emit InvestmentTokenStaked(msg.sender, _tokenStakeAmount, block.timestamp);
     }
 
     function calculateRentShare(address _investor) public {
@@ -114,20 +114,20 @@ contract FractionRentRegistry is Ownable {
         emit RentShareWithdrawn(msg.sender, withdrawnRentAmount, block.timestamp);
     }
 
-    function withdrawOwnershipTokens(uint256 _tokenWithdrawalAmount) public {
+    function withdrawinvestmentTokens(uint256 _tokenWithdrawalAmount) public {
         require(_tokenWithdrawalAmount > 0, "Can't withdraw 0 tokens");
         require(balanceOf[msg.sender] >= _tokenWithdrawalAmount, "User's staked token balance is less than specified withdrawal amount");
         balanceOf[msg.sender] -= _tokenWithdrawalAmount;
-        ownershipToken.safeTransfer(msg.sender, _tokenWithdrawalAmount);
-        emit OwnershipTokenUnstaked(msg.sender, _tokenWithdrawalAmount, block.timestamp);
+        investmentToken.safeTransfer(msg.sender, _tokenWithdrawalAmount);
+        emit InvestmentTokenUnstaked(msg.sender, _tokenWithdrawalAmount, block.timestamp);
     }
 
     function setTokenUsedForRentPayments(address _tokenUsedForRentPayments) public onlyOwner notNullAddress(_tokenUsedForRentPayments) {
         tokenUsedForRentPayments = IERC20(_tokenUsedForRentPayments);
     }
 
-    function getBalanceOfStakedOwnershipTokens() public view returns(uint256) {
-        return ownershipToken.balanceOf(address(this));
+    function getBalanceOfStakedinvestmentTokens() public view returns(uint256) {
+        return investmentToken.balanceOf(address(this));
     }
 
     function getBalanceOfRentDeposited() public view returns(uint256) {
@@ -137,7 +137,6 @@ contract FractionRentRegistry is Ownable {
     function getETHBalance() public view returns(uint256) {
         return address(this).balance;
     }
-
 
     function withdraw() public onlyOwner {
         uint256 amount = address(this).balance;

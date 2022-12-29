@@ -83,7 +83,7 @@ contract BlockHiveFractionRentRegistry is Ownable {
         tenantAddressIndexMapping[tenantArray[index].tenant] = index;
     }
 	
-	function depositRent(uint256 _rentAmount) public {
+    function depositRent(uint256 _rentAmount) public {
         tokenUsedForRentPayments.safeApprove(msg.sender, _rentAmount);
         tokenUsedForRentPayments.safeTransferFrom(msg.sender, address(this), _rentAmount);
         emit RentDeposited(msg.sender, _rentAmount, block.timestamp);
